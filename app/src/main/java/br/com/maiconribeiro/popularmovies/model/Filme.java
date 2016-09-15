@@ -10,9 +10,7 @@ public class Filme implements Serializable {
     private String titulo;
     private String pathImagemPoster;
 
-    public Filme(String titulo, String pathImagemPoster) {
-        this.titulo = titulo;
-        this.pathImagemPoster = pathImagemPoster;
+    public Filme() {
     }
 
     public String getTitulo() {

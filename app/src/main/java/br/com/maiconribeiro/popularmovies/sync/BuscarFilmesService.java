@@ -4,24 +4,31 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.maiconribeiro.popularmovies.BuildConfig;
+import br.com.maiconribeiro.popularmovies.model.Filme;
 
 /**
  * Created by maiconwillianribeiro on 15/09/16.
  */
-public class BuscarFilmesService extends AsyncTask<Void, Void, String> {
+public class BuscarFilmesService extends AsyncTask<Void, Void, List<Filme>> {
 
     private final String LOG_TAG = BuscarFilmesService.class.getSimpleName();
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected List<Filme> doInBackground(Void... params) {
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -75,7 +82,7 @@ public class BuscarFilmesService extends AsyncTask<Void, Void, String> {
 
             jsonResult = buffer.toString();
 
-            return jsonResult;
+            return this.criarListaFilmes(jsonResult);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -93,5 +100,37 @@ public class BuscarFilmesService extends AsyncTask<Void, Void, String> {
         }
 
         return null;
+    }
+
+    private List<Filme> criarListaFilmes(String jsonResult) {
+
+        ArrayList<Filme> filmes = new ArrayList<>();
+
+        final String IMAGE_PATH = "http://image.tmdb.org/t/p/w500";
+        final String RESULTS = "results";
+        final String TITLE = "title";
+        final String POSTER_PATH = "poster_path";
+
+        try {
+
+            JSONObject filmesJson = new JSONObject(jsonResult);
+            JSONArray filmesArray = filmesJson.getJSONArray(RESULTS);
+
+            if(filmesArray.length() > 0){
+                for(int i = 0; i < filmesArray.length(); i++) {
+                    JSONObject f = filmesArray.getJSONObject(i);
+                    Filme filme = new Filme();
+                    filme.setTitulo(f.getString(TITLE));
+                    filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
+                    filmes.add(filme);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return filmes;
     }
 }
