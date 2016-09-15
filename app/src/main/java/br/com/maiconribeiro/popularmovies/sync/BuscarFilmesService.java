@@ -23,21 +23,25 @@ import br.com.maiconribeiro.popularmovies.model.Filme;
 /**
  * Created by maiconwillianribeiro on 15/09/16.
  */
-public class BuscarFilmesService extends AsyncTask<Void, Void, List<Filme>> {
+public class BuscarFilmesService extends AsyncTask<String, Void, List<Filme>> {
 
     private final String LOG_TAG = BuscarFilmesService.class.getSimpleName();
 
     @Override
-    protected List<Filme> doInBackground(Void... params) {
+    protected List<Filme> doInBackground(String... params) {
+
+        if (params.length == 0) {
+            return null;
+        }
+
+        String page = params[0];
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
         String jsonResult = null;
 
-        //String url  = "https:/api.themoviedb.org/3/discover/movie?primary_release_date.gte=2016-08-01&primary_release_date.lte=2016-09-15&api_key=7ea383009eb3a8e046f6b5bf47afba18";
         try {
-
 
             final String URL_BASE = "https://api.themoviedb.org/3/";
             final String TIPO_SERVICO = "discover";
@@ -46,6 +50,7 @@ public class BuscarFilmesService extends AsyncTask<Void, Void, List<Filme>> {
             final String DATA_INICIO_VALUE = "2016-08-01";
             final String DATA_FINAL_PARAM = "primary_release_date.lte";
             final String DATA_FINAL_VALUE = "2016-09-1";
+            final String PAGE_PARAM = "page";
             final String API_KEY = "api_key";
 
             Uri builtUri = Uri.parse(URL_BASE).buildUpon()
@@ -54,6 +59,7 @@ public class BuscarFilmesService extends AsyncTask<Void, Void, List<Filme>> {
                     .appendQueryParameter(DATA_INICIO_PARAM, DATA_INICIO_VALUE)
                     .appendQueryParameter(DATA_FINAL_PARAM, DATA_FINAL_VALUE)
                     .appendQueryParameter(DATA_FINAL_PARAM, DATA_FINAL_VALUE)
+                    .appendQueryParameter(PAGE_PARAM, page)
                     .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
                     .build();
 
@@ -116,8 +122,8 @@ public class BuscarFilmesService extends AsyncTask<Void, Void, List<Filme>> {
             JSONObject filmesJson = new JSONObject(jsonResult);
             JSONArray filmesArray = filmesJson.getJSONArray(RESULTS);
 
-            if(filmesArray.length() > 0){
-                for(int i = 0; i < filmesArray.length(); i++) {
+            if (filmesArray.length() > 0) {
+                for (int i = 0; i < filmesArray.length(); i++) {
                     JSONObject f = filmesArray.getJSONObject(i);
                     Filme filme = new Filme();
                     filme.setTitulo(f.getString(TITLE));
