@@ -1,6 +1,7 @@
 package br.com.maiconribeiro.popularmovies.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import br.com.maiconribeiro.popularmovies.FilmeDetalhesActivity;
 import br.com.maiconribeiro.popularmovies.R;
 import br.com.maiconribeiro.popularmovies.model.Filme;
 
@@ -37,6 +39,19 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
         viewHolder.tituloFilme.setText(filmes.get(i).getTitulo());
         Picasso.with(context).load(filmes.get(i).getPathImagemPoster()).into(viewHolder.imagemfilme);
+
+        viewHolder.imagemfilme.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent (context, FilmeDetalhesActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(intent);
+
+            }
+        });
     }
 
     @Override

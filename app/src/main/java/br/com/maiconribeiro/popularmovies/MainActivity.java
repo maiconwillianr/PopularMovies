@@ -2,9 +2,13 @@ package br.com.maiconribeiro.popularmovies;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.initViews();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem item = menu.findItem(R.id.spinner);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+
+        return true;
     }
 
     private void initViews() {
@@ -51,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 Handler handler = new Handler();
                 final Runnable r = new Runnable() {
                     public void run() {
-                        int curSize = adapter.getItemCount();
-                        adapter.notifyItemRangeInserted(curSize, todosFilmes.size() - 1);
+                        adapter.notifyItemRangeInserted(adapter.getItemCount(), todosFilmes.size() - 1);
                     }
                 };
                 handler.post(r);
@@ -61,19 +77,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Cria a grid de filmes através do webservice
     private ArrayList<Filme> criarGridFilmes(String page) {
-
-        ArrayList<Filme> filmes = new ArrayList();
 
         BuscarFilmesService buscarFilmesService = new BuscarFilmesService();
         try {
-            filmes.addAll(buscarFilmesService.execute(page).get());
+            return buscarFilmesService.execute(page).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        return filmes;
+        return null;
     }
 }

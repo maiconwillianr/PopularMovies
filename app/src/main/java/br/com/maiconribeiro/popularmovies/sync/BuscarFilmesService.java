@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.maiconribeiro.popularmovies.BuildConfig;
 import br.com.maiconribeiro.popularmovies.model.Filme;
@@ -23,12 +22,12 @@ import br.com.maiconribeiro.popularmovies.model.Filme;
 /**
  * Created by maiconwillianribeiro on 15/09/16.
  */
-public class BuscarFilmesService extends AsyncTask<String, Void, List<Filme>> {
+public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme>> {
 
     private final String LOG_TAG = BuscarFilmesService.class.getSimpleName();
 
     @Override
-    protected List<Filme> doInBackground(String... params) {
+    protected ArrayList<Filme> doInBackground(String... params) {
 
         if (params.length == 0) {
             return null;
@@ -39,7 +38,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, List<Filme>> {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-        String jsonResult = null;
+        String jsonResult;
 
         try {
 
@@ -108,7 +107,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, List<Filme>> {
         return null;
     }
 
-    private List<Filme> criarListaFilmes(String jsonResult) {
+    private ArrayList<Filme> criarListaFilmes(String jsonResult) {
 
         ArrayList<Filme> filmes = new ArrayList<>();
 
