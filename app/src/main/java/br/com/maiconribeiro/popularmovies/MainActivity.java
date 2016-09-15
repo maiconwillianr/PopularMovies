@@ -1,7 +1,7 @@
 package br.com.maiconribeiro.popularmovies;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.util.concurrent.ExecutionException;
@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
+       // Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into(imageView);
 
         setContentView(R.layout.activity_main);
     }
