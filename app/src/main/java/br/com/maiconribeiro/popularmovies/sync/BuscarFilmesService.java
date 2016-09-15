@@ -106,7 +106,7 @@ public class BuscarFilmesService extends AsyncTask<Void, Void, List<Filme>> {
 
         ArrayList<Filme> filmes = new ArrayList<>();
 
-        final String IMAGE_PATH = "http://image.tmdb.org/t/p/w500";
+        final String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
         final String RESULTS = "results";
         final String TITLE = "title";
         final String POSTER_PATH = "poster_path";

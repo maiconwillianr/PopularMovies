@@ -36,7 +36,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     public void onBindViewHolder(DataAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.tituloFilme.setText(filmes.get(i).getTitulo());
-        Picasso.with(context).load(filmes.get(i).getPathImagemPoster()).resize(240, 120).into(viewHolder.imagemfilme);
+        Picasso.with(context).load(filmes.get(i).getPathImagemPoster()).into(viewHolder.imagemfilme);
     }
 
     @Override
