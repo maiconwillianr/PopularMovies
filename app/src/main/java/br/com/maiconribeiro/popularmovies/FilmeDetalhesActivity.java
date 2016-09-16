@@ -43,7 +43,14 @@ public class FilmeDetalhesActivity extends AppCompatActivity {
 
             ImageView imageFilme = (ImageView) findViewById(R.id.imagemDetalhe);
 
-            Picasso.with(this).load(filme.getPathImagemPoster()).into(imageFilme);
+            if (!"".equals(filme.getPathImagemPoster())) {
+                Picasso.with(this).load(filme.getPathImagemPoster()).into(imageFilme);
+            } else {
+                Picasso.with(this).load(R.drawable.not_found).into(imageFilme);
+            }
+
+            TextView labelNumeroVotos = (TextView) findViewById(R.id.numeroVotos);
+            labelNumeroVotos.setText(filme.getNumeroVotos());
 
             Float notaMedia = Float.valueOf(filme.getNotaMedia());
             RatingBar rb = (RatingBar) findViewById(R.id.mediaVotos);

@@ -12,6 +12,7 @@ public class Filme implements Serializable {
     private String sinopse;
     private String dataLancamento;
     private String notaMedia;
+    private String numeroVotos;
 
     public Filme() {
     }
@@ -54,5 +55,13 @@ public class Filme implements Serializable {
 
     public void setNotaMedia(String notaMedia) {
         this.notaMedia = notaMedia;
+    }
+
+    public String getNumeroVotos() {
+        return numeroVotos;
+    }
+
+    public void setNumeroVotos(String numeroVotos) {
+        this.numeroVotos = numeroVotos;
     }
 }

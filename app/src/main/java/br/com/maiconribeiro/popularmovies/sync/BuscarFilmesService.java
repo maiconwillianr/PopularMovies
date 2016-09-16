@@ -50,7 +50,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
             final String DATA_FINAL_PARAM = "primary_release_date.lte";
             final String DATA_FINAL_VALUE = params[2];
             final String SORT_BY_PARAM = "sort_by";
-            final String SORT_BY_VALUE = "primary_release_date.desc";
+            final String SORT_BY_VALUE = params[3];
             final String PAGE_PARAM = "page";
             final String API_KEY = "api_key";
 
@@ -121,6 +121,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
         final String VOTE_AVAREGE = "vote_average";
         final String OVERVIEW = "overview";
         final String RELEASE_DATE = "release_date";
+        final String VOTE_COUNT = "vote_count";
 
         try {
 
@@ -140,6 +141,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
                     filme.setNotaMedia(f.getString(VOTE_AVAREGE));
                     filme.setSinopse(f.getString(OVERVIEW));
                     filme.setDataLancamento(f.getString(RELEASE_DATE));
+                    filme.setNumeroVotos(f.getString(VOTE_COUNT));
                     filmes.add(filme);
                 }
             }

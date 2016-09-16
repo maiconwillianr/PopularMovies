@@ -3,23 +3,35 @@
     <string name="nota_media">Nota média</string>
     <string name="titulo">Título</string>
     <string name="lancamento">Lançamento</string>
+    <string name="numero_voto">Numero de Votos</string>
     <string name="sinopse">Sinopse</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="action_settings">Configurações</string>
 
     <string name="pref_category_ordenacao">Ordenação</string>
-    <string name="pref_ordenacao_key">Ordenar</string>
+    <string name="pref_ordenacao_key">ordenacao</string>
+    <string name="pref_ordenacao_default">popularity.desc</string>
     <string name="pref_ordenacao_title">Ordenar Por</string>
     <string name="pref_ordenacao_summary">Selecione o tipo de ordenação a ser utilizado</string>
     <string-array name="pref_ordenacao_titles">
-        <item>Título</item>
-        <item>Data Lançamento</item>
-        <item>Maior Nota</item>
+        <item>Título Asc</item>
+        <item>Título Desc</item>
+        <item>Data Lançamento Asc</item>
+        <item>Data Lançamento Desc</item>
+        <item>Melhor Avaliado</item>
+        <item>Numero de Votos</item>
+        <item>Popularidade Asc</item>
+        <item>Popularidade Desc</item>
     </string-array>
     <string-array name="pref_ordenacao_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
+        <item>original_title.asc</item>
+        <item>original_title.desc</item>
+        <item>primary_release_date.asc</item>
+        <item>primary_release_date.desc</item>
+        <item>vote_average.desc</item>
+        <item>vote_count.desc</item>
+        <item>popularity.asc</item>
+        <item>popularity.desc</item>
     </string-array>
 
 </resources>

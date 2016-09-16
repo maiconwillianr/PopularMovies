@@ -25,6 +25,8 @@ import br.com.maiconribeiro.popularmovies.sync.BuscarFilmesService;
 public class MainActivity extends AppCompatActivity {
 
 
+    private String filtroPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -32,8 +34,20 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        this.obterPreferenciasUsuario();
+
         this.initViews();
 
+    }
+
+    @Override
+    protected void onResume() {
+
+        this.obterPreferenciasUsuario();
+
+        this.initViews();
+
+        super.onResume();
     }
 
     @Override
@@ -76,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         final LocalDate localDate = new LocalDate();
 
         //Lista de Filmes utilizando espaço de tempo de um mês
-        final ArrayList<Filme> todosFilmes = listarFilmes(String.valueOf(1), localDate.minusMonths(1).toString(), localDate.toString());
+        final ArrayList<Filme> todosFilmes = listarFilmes(String.valueOf(1), localDate.minusMonths(1).toString(), localDate.toString(), filtroPref);
 
         final DataAdapter adapter = new DataAdapter(getApplicationContext(), todosFilmes);
         recyclerView.setAdapter(adapter);
@@ -86,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
 
-                List<Filme> maisFilmes = listarFilmes(String.valueOf(page), localDate.minusMonths(1).toString(), localDate.toString());
+                List<Filme> maisFilmes = listarFilmes(String.valueOf(page), localDate.minusMonths(1).toString(), localDate.toString(), filtroPref);
                 todosFilmes.addAll(maisFilmes);
                 Handler handler = new Handler();
                 final Runnable r = new Runnable() {
@@ -101,11 +115,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Cria a grid de filmes através do webservice
-    private ArrayList<Filme> listarFilmes(String page, String dataInicioPesquisa, String dataFimPesquisa) {
+    private ArrayList<Filme> listarFilmes(String page, String dataInicioPesquisa, String dataFimPesquisa, String filtroPesquisa) {
 
         BuscarFilmesService buscarFilmesService = new BuscarFilmesService();
         try {
-            return buscarFilmesService.execute(page, dataInicioPesquisa, dataFimPesquisa).get();
+            return buscarFilmesService.execute(page, dataInicioPesquisa, dataFimPesquisa, filtroPesquisa).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -120,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
         //Preferencias selecionadas pelo usuário
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
-
+        filtroPref = settings.getString(getString(R.string.pref_ordenacao_key), getString(R.string.pref_ordenacao_default));
+        if (filtroPref == null || filtroPref.equals("")) {
+            //Obtém a localização deafult
+            filtroPref = getString(R.string.pref_ordenacao_default);
+        }
     }
 }
