@@ -115,6 +115,8 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
         final String RESULTS = "results";
         final String TITLE = "title";
         final String POSTER_PATH = "poster_path";
+        final String VOTE_AVAREGE = "vote_average";
+        final String OVERVIEW = "overview";
 
         try {
 
@@ -127,6 +129,8 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
                     Filme filme = new Filme();
                     filme.setTitulo(f.getString(TITLE));
                     filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
+                    filme.setNotaMedia(VOTE_AVAREGE);
+                    filme.setSinopse(OVERVIEW);
                     filmes.add(filme);
                 }
             }

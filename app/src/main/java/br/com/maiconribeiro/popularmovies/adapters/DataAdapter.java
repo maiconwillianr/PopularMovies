@@ -40,13 +40,18 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         viewHolder.tituloFilme.setText(filmes.get(i).getTitulo());
         Picasso.with(context).load(filmes.get(i).getPathImagemPoster()).into(viewHolder.imagemfilme);
 
+        viewHolder.imagemfilme.setTag(i);
         viewHolder.imagemfilme.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent (context, FilmeDetalhesActivity.class);
+                Integer pos = (Integer) view.getTag();
+
+                Intent intent = new Intent(context, FilmeDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                intent.putExtra("filme", filmes.get(pos));
 
                 context.startActivity(intent);
 
