@@ -38,7 +38,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     public void onBindViewHolder(DataAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.tituloFilme.setText(filmes.get(i).getTitulo());
-        Picasso.with(context).load(filmes.get(i).getPathImagemPoster()).into(viewHolder.imagemfilme);
+        if(!"".equals(filmes.get(i).getPathImagemPoster())){
+            Picasso.with(context).load(filmes.get(i).getPathImagemPoster()).into(viewHolder.imagemfilme);
+        }else{
+            Picasso.with(context).load(R.drawable.not_found).into(viewHolder.imagemfilme);
+        }
+
 
         viewHolder.imagemfilme.setTag(i);
         viewHolder.imagemfilme.setOnClickListener(new View.OnClickListener() {

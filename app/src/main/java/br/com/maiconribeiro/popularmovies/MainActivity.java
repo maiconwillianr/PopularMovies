@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -19,6 +21,8 @@ import br.com.maiconribeiro.popularmovies.model.Filme;
 import br.com.maiconribeiro.popularmovies.sync.BuscarFilmesService;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String dataFimPesquisa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +71,11 @@ public class MainActivity extends AppCompatActivity {
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
+        //Pega a data atual para utilizar na pesquisa
+        final LocalDate localDate = new LocalDate();
+
         //Lista de Filmes
-        final ArrayList<Filme> todosFilmes = criarGridFilmes(String.valueOf(1));
+        final ArrayList<Filme> todosFilmes = listarFilmes(String.valueOf(1), "2016-09-01", localDate.toString());
 
         final DataAdapter adapter = new DataAdapter(getApplicationContext(), todosFilmes);
         recyclerView.setAdapter(adapter);
@@ -78,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
 
-                List<Filme> maisFilmes = criarGridFilmes(String.valueOf(page));
+                List<Filme> maisFilmes = listarFilmes(String.valueOf(page), "2016-09-01", localDate.toString());
                 todosFilmes.addAll(maisFilmes);
                 Handler handler = new Handler();
                 final Runnable r = new Runnable() {
@@ -93,11 +100,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Cria a grid de filmes através do webservice
-    private ArrayList<Filme> criarGridFilmes(String page) {
+    private ArrayList<Filme> listarFilmes(String page, String dataInicioPesquisa, String dataFimPesquisa) {
 
         BuscarFilmesService buscarFilmesService = new BuscarFilmesService();
         try {
-            return buscarFilmesService.execute(page).get();
+            return buscarFilmesService.execute(page, dataInicioPesquisa, dataFimPesquisa).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

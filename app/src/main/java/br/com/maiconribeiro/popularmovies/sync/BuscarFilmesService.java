@@ -46,9 +46,9 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
             final String TIPO_SERVICO = "discover";
             final String TIPO_ESPETACULO = "movie";
             final String DATA_INICIO_PARAM = "primary_release_date.gte";
-            final String DATA_INICIO_VALUE = "2016-08-01";
+            final String DATA_INICIO_VALUE = params[1];
             final String DATA_FINAL_PARAM = "primary_release_date.lte";
-            final String DATA_FINAL_VALUE = "2016-09-1";
+            final String DATA_FINAL_VALUE = params[2];
             final String PAGE_PARAM = "page";
             final String API_KEY = "api_key";
 
@@ -129,7 +129,11 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
                     JSONObject f = filmesArray.getJSONObject(i);
                     Filme filme = new Filme();
                     filme.setTitulo(f.getString(TITLE));
-                    filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
+                    if(!"null".equals(f.getString(POSTER_PATH))){
+                        filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
+                    }else{
+                        filme.setPathImagemPoster("");
+                    }
                     filme.setNotaMedia(f.getString(VOTE_AVAREGE));
                     filme.setSinopse(f.getString(OVERVIEW));
                     filme.setDataLancamento(f.getString(RELEASE_DATE));
