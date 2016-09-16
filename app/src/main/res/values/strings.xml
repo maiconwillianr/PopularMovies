@@ -4,4 +4,22 @@
     <string name="titulo">Título</string>
     <string name="lancamento">Lançamento</string>
     <string name="sinopse">Sinopse</string>
+    <string name="title_activity_settings">Configurações</string>
+    <string name="action_settings">Configurações</string>
+
+    <string name="pref_category_ordenacao">Ordenação</string>
+    <string name="pref_ordenacao_key">Ordenar</string>
+    <string name="pref_ordenacao_title">Ordenar Por</string>
+    <string name="pref_ordenacao_summary">Selecione o tipo de ordenação a ser utilizado</string>
+    <string-array name="pref_ordenacao_titles">
+        <item>Título</item>
+        <item>Data Lançamento</item>
+        <item>Maior Nota</item>
+    </string-array>
+    <string-array name="pref_ordenacao_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
 </resources>

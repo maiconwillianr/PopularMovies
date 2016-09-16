@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_category_ordenacao">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/pref_ordenacao_titles"
+            android:entryValues="@array/pref_ordenacao_values"
+            android:key="@string/pref_ordenacao_key"
+            android:summary="@string/pref_ordenacao_summary"
+            android:title="@string/pref_ordenacao_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

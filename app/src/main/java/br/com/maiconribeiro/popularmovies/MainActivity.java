@@ -1,14 +1,13 @@
 package br.com.maiconribeiro.popularmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +36,28 @@ public class MainActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        MenuItem item = menu.findItem(R.id.spinner);
-        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+        return super.onCreateOptionsMenu(menu);
 
-
-        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+
+            startActivity(settingsIntent);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
 
     private void initViews() {
 
