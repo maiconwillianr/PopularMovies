@@ -49,6 +49,8 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
             final String DATA_INICIO_VALUE = params[1];
             final String DATA_FINAL_PARAM = "primary_release_date.lte";
             final String DATA_FINAL_VALUE = params[2];
+            final String SORT_BY_PARAM = "sort_by";
+            final String SORT_BY_VALUE = "primary_release_date.desc";
             final String PAGE_PARAM = "page";
             final String API_KEY = "api_key";
 
@@ -59,6 +61,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
                     .appendQueryParameter(DATA_FINAL_PARAM, DATA_FINAL_VALUE)
                     .appendQueryParameter(DATA_FINAL_PARAM, DATA_FINAL_VALUE)
                     .appendQueryParameter(PAGE_PARAM, page)
+                    .appendQueryParameter(SORT_BY_PARAM, SORT_BY_VALUE)
                     .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
                     .build();
 

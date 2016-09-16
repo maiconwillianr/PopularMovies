@@ -1,8 +1,10 @@
 package br.com.maiconribeiro.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +24,6 @@ import br.com.maiconribeiro.popularmovies.sync.BuscarFilmesService;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String dataFimPesquisa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         //Pega a data atual para utilizar na pesquisa
         final LocalDate localDate = new LocalDate();
 
-        //Lista de Filmes
-        final ArrayList<Filme> todosFilmes = listarFilmes(String.valueOf(1), "2016-09-01", localDate.toString());
+        //Lista de Filmes utilizando espaço de tempo de um mês
+        final ArrayList<Filme> todosFilmes = listarFilmes(String.valueOf(1), localDate.minusMonths(1).toString(), localDate.toString());
 
         final DataAdapter adapter = new DataAdapter(getApplicationContext(), todosFilmes);
         recyclerView.setAdapter(adapter);
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
 
-                List<Filme> maisFilmes = listarFilmes(String.valueOf(page), "2016-09-01", localDate.toString());
+                List<Filme> maisFilmes = listarFilmes(String.valueOf(page), localDate.minusMonths(1).toString(), localDate.toString());
                 todosFilmes.addAll(maisFilmes);
                 Handler handler = new Handler();
                 final Runnable r = new Runnable() {
@@ -112,5 +113,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return null;
+    }
+
+    public void obterPreferenciasUsuario() {
+
+        //Preferencias selecionadas pelo usuário
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+
     }
 }
