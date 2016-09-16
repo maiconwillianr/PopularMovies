@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PopularMovies</string>
+    <string name="nota_media">Nota média</string>
+    <string name="sinopse">Sinopse</string>
 </resources>
