@@ -25,7 +25,7 @@ public class FilmeDetalhesActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
 
-            Filme filme = (Filme) getIntent().getSerializableExtra("filme");
+            Filme filme = getIntent().getExtras().getParcelable(Filme.PARCELABLE_KEY);
 
             //Seta o titulo da ActionBar com o nome do filme escolhido
             getSupportActionBar().setTitle(filme.getTitulo());

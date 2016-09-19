@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:id="@+id/rootLayout"
     tools:context="br.com.maiconribeiro.popularmovies.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/card_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:foreground="?attr/selectableItemBackground"
         android:scrollbars="vertical" />
 
 </android.support.design.widget.CoordinatorLayout>

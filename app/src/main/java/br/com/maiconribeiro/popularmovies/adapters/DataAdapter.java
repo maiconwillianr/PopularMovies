@@ -38,9 +38,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     public void onBindViewHolder(DataAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.tituloFilme.setText(filmes.get(i).getTitulo());
-        if(!"".equals(filmes.get(i).getPathImagemPoster())){
+        if (!"".equals(filmes.get(i).getPathImagemPoster())) {
             Picasso.with(context).load(filmes.get(i).getPathImagemPoster()).into(viewHolder.imagemfilme);
-        }else{
+        } else {
             Picasso.with(context).load(R.drawable.not_found).into(viewHolder.imagemfilme);
         }
 
@@ -55,8 +55,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
                 Intent intent = new Intent(context, FilmeDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                intent.putExtra("filme", filmes.get(pos));
+                intent.putExtra(Filme.PARCELABLE_KEY, filmes.get(pos));
 
                 context.startActivity(intent);
 
@@ -66,7 +65,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return filmes.size();
+        if (filmes != null) {
+            return filmes.size();
+        }
+        return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

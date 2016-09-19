@@ -8,16 +8,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
 import br.com.maiconribeiro.popularmovies.BuildConfig;
+import br.com.maiconribeiro.popularmovies.interfaces.AsyncTaskDelegate;
 import br.com.maiconribeiro.popularmovies.model.Filme;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by maiconwillianribeiro on 15/09/16.
@@ -25,6 +25,12 @@ import br.com.maiconribeiro.popularmovies.model.Filme;
 public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme>> {
 
     private final String LOG_TAG = BuscarFilmesService.class.getSimpleName();
+
+    private AsyncTaskDelegate delegate = null;
+
+    public BuscarFilmesService(AsyncTaskDelegate responder){
+        this.delegate = responder;
+    }
 
     @Override
     protected ArrayList<Filme> doInBackground(String... params) {
@@ -35,10 +41,9 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
 
         String page = params[0];
 
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-
         String jsonResult;
+
+        Response response;
 
         try {
 
@@ -67,47 +72,29 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
 
             URL url = new URL(builtUri.toString());
 
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
+            OkHttpClient client = new OkHttpClient();
 
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                return null;
-            }
+            Request request = new Request.Builder().url(url).build();
 
-            reader = new BufferedReader(new InputStreamReader(inputStream));
+            response = client.newCall(request).execute();
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line + "\n");
-            }
-
-            if (buffer.length() == 0) {
-                return null;
-            }
-
-            jsonResult = buffer.toString();
+            jsonResult = response.body().string();
 
             return this.criarListaFilmes(jsonResult);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
-                }
-            }
         }
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<Filme> filmes) {
+        super.onPostExecute(filmes);
+        if(delegate != null){
+            delegate.processFinish(filmes);
+        }
     }
 
     private ArrayList<Filme> criarListaFilmes(String jsonResult) {
@@ -133,9 +120,9 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
                     JSONObject f = filmesArray.getJSONObject(i);
                     Filme filme = new Filme();
                     filme.setTitulo(f.getString(TITLE));
-                    if(!"null".equals(f.getString(POSTER_PATH))){
+                    if (!"null".equals(f.getString(POSTER_PATH))) {
                         filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
-                    }else{
+                    } else {
                         filme.setPathImagemPoster("");
                     }
                     filme.setNotaMedia(f.getString(VOTE_AVAREGE));
