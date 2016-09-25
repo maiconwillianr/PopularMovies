@@ -71,6 +71,7 @@ public class DetalhesFilmeService extends AsyncTask<String, Void, Filme> {
 
         Filme filme = new Filme();
 
+        final String ID = "id";
         final String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
         final String TITLE = "title";
         final String POSTER_PATH = "poster_path";
@@ -84,6 +85,7 @@ public class DetalhesFilmeService extends AsyncTask<String, Void, Filme> {
 
             JSONObject f = new JSONObject(jsonResult);
 
+            filme.setIdFilme(f.getString(ID));
             filme.setTitulo(f.getString(TITLE));
             if (!"null".equals(f.getString(POSTER_PATH))) {
                 filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
@@ -95,7 +97,6 @@ public class DetalhesFilmeService extends AsyncTask<String, Void, Filme> {
             filme.setDataLancamento(f.getString(RELEASE_DATE));
             filme.setNumeroVotos(f.getString(VOTE_COUNT));
             filme.setDuracao(f.getString(RUNTIME));
-
 
         } catch (JSONException e) {
             e.printStackTrace();
