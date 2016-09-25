@@ -4,6 +4,7 @@
     <string name="titulo">Título</string>
     <string name="lancamento">Lançamento</string>
     <string name="numero_voto">Numero de Votos</string>
+    <string name="duracao">Duração</string>
     <string name="sinopse">Sinopse</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="action_settings">Configurações</string>

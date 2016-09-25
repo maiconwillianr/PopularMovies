@@ -12,10 +12,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import br.com.maiconribeiro.popularmovies.FilmeDetalhesActivity;
 import br.com.maiconribeiro.popularmovies.R;
+import br.com.maiconribeiro.popularmovies.helpers.Util;
 import br.com.maiconribeiro.popularmovies.model.Filme;
+import br.com.maiconribeiro.popularmovies.sync.DetalhesFilmeService;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
@@ -55,7 +58,22 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
                 Intent intent = new Intent(context, FilmeDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(Filme.PARCELABLE_KEY, filmes.get(pos));
+
+                DetalhesFilmeService detalhesFilmeService = new DetalhesFilmeService();
+
+                try {
+
+                    //Verifica se a conexao com a internet
+                    if (Util.checkConnection(context)) {
+                        intent.putExtra(Filme.PARCELABLE_KEY,
+                                detalhesFilmeService.execute(filmes.get(pos).getIdFilme()).get());
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
 
                 context.startActivity(intent);
 

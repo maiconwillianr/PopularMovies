@@ -49,6 +49,9 @@ public class FilmeDetalhesActivity extends AppCompatActivity {
                 Picasso.with(this).load(R.drawable.not_found).into(imageFilme);
             }
 
+            TextView labelDuracao = (TextView) findViewById(R.id.duracao);
+            labelDuracao.setText(filme.getDuracao());
+
             TextView labelNumeroVotos = (TextView) findViewById(R.id.numeroVotos);
             labelNumeroVotos.setText(filme.getNumeroVotos());
 

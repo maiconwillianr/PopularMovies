@@ -109,6 +109,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
         final String OVERVIEW = "overview";
         final String RELEASE_DATE = "release_date";
         final String VOTE_COUNT = "vote_count";
+        final String ID = "id";
 
         try {
 
@@ -119,6 +120,7 @@ public class BuscarFilmesService extends AsyncTask<String, Void, ArrayList<Filme
                 for (int i = 0; i < filmesArray.length(); i++) {
                     JSONObject f = filmesArray.getJSONObject(i);
                     Filme filme = new Filme();
+                    filme.setIdFilme(f.getString(ID));
                     filme.setTitulo(f.getString(TITLE));
                     if (!"null".equals(f.getString(POSTER_PATH))) {
                         filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
