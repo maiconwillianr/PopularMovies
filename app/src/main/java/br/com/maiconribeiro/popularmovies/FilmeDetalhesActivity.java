@@ -3,7 +3,6 @@ package br.com.maiconribeiro.popularmovies;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -26,10 +25,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import br.com.maiconribeiro.popularmovies.helpers.Util;
 import br.com.maiconribeiro.popularmovies.model.Filme;
 import br.com.maiconribeiro.popularmovies.model.Video;
 
 public class FilmeDetalhesActivity extends AppCompatActivity {
+
+    private Filme filme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,45 +42,13 @@ public class FilmeDetalhesActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
 
-            final Filme filme = getIntent().getExtras().getParcelable(Filme.PARCELABLE_KEY);
+            filme = getIntent().getExtras().getParcelable(Filme.PARCELABLE_KEY);
 
-            final String URL_BASE = "https://api.themoviedb.org/3/";
-            final String TIPO_SERVICO = "movie";
-            final String VIDEOS = "videos";
-            final String MOVIE_ID = filme.getIdFilme();
-            final String API_KEY = "api_key";
+            //Verifica se a conexao com a internet
+            if (Util.checkConnection(this)) {
 
-            Uri builtUri = Uri.parse(URL_BASE).buildUpon()
-                    .appendPath(TIPO_SERVICO)
-                    .appendPath(MOVIE_ID)
-                    .appendPath(VIDEOS)
-                    .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
-                    .build();
-
-            URL url = null;
-            try {
-                url = new URL(builtUri.toString());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+                this.buscarVideos(filme.getIdFilme());
             }
-
-            Log.i("url", url.toString());
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url.toString(),
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            filme.setVideos(parseJson(response));
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-
-            RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
-            queue.add(request);
 
             //Seta o titulo da ActionBar com o nome do filme escolhido
             getSupportActionBar().setTitle(filme.getTitulo());
@@ -134,7 +104,48 @@ public class FilmeDetalhesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public ArrayList<Video> parseJson(JSONObject videosJson) {
+
+    private void buscarVideos(String idFilme) {
+
+        final String URL_BASE = "https://api.themoviedb.org/3/";
+        final String TIPO_SERVICO = "movie";
+        final String VIDEOS = "videos";
+        final String MOVIE_ID = idFilme;
+        final String API_KEY = "api_key";
+
+        Uri builtUri = Uri.parse(URL_BASE).buildUpon()
+                .appendPath(TIPO_SERVICO)
+                .appendPath(MOVIE_ID)
+                .appendPath(VIDEOS)
+                .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url.toString(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        filme = parseJson(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+        queue.add(request);
+    }
+
+    private ArrayList<Video> parseVideoJson(JSONObject videosJson) {
 
         ArrayList<Video> videos = new ArrayList<>();
 
@@ -178,5 +189,41 @@ public class FilmeDetalhesActivity extends AppCompatActivity {
         }
 
         return videos;
+    }
+
+    public Filme parseJson(JSONObject f) {
+
+        Filme filme = new Filme();
+
+        final String ID = "id";
+        final String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
+        final String TITLE = "title";
+        final String POSTER_PATH = "poster_path";
+        final String VOTE_AVAREGE = "vote_average";
+        final String OVERVIEW = "overview";
+        final String RELEASE_DATE = "release_date";
+        final String VOTE_COUNT = "vote_count";
+        final String RUNTIME = "runtime";
+
+        try {
+
+            filme.setIdFilme(f.getString(ID));
+            filme.setTitulo(f.getString(TITLE));
+            if (!"null".equals(f.getString(POSTER_PATH))) {
+                filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
+            } else {
+                filme.setPathImagemPoster("");
+            }
+            filme.setNotaMedia(f.getString(VOTE_AVAREGE));
+            filme.setSinopse(f.getString(OVERVIEW));
+            filme.setDataLancamento(f.getString(RELEASE_DATE));
+            filme.setNumeroVotos(f.getString(VOTE_COUNT));
+            filme.setDuracao(f.getString(RUNTIME));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return filme;
     }
 }
