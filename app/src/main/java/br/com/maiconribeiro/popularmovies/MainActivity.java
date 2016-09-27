@@ -14,8 +14,6 @@ import android.widget.Toast;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import br.com.maiconribeiro.popularmovies.adapters.DataAdapter;
 import br.com.maiconribeiro.popularmovies.helpers.Util;
@@ -29,6 +27,9 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate
 
     private String filtroPref;
     private DataAdapter adapter;
+    RecyclerView recyclerView;
+
+    private ArrayList<Filme> todosFilmes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +38,20 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate
 
         setContentView(R.layout.activity_main);
 
+        todosFilmes = new ArrayList<>();
+
+        this.obterPreferenciasUsuario();
+
+        this.listarFilmes(String.valueOf(1), filtroPref);
+
         this.initViews();
+
     }
 
     @Override
     protected void onResume() {
 
         this.obterPreferenciasUsuario();
-
-        this.initViews();
 
         super.onResume();
     }
@@ -55,9 +61,15 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate
 
         if (output != null) {
 
-            ArrayList<Filme> filmes = (ArrayList<Filme>) output;
+            if (adapter == null) {
+                todosFilmes = (ArrayList<Filme>) output;
+                adapter = new DataAdapter(getApplicationContext(), todosFilmes);
+                recyclerView.setAdapter(adapter);
+            } else {
+                todosFilmes.addAll((ArrayList<Filme>) output);
+                adapter.notifyItemRangeInserted(adapter.getItemCount(), todosFilmes.size() - 1);
+            }
 
-            adapter.notifyItemRangeInserted(adapter.getItemCount(), filmes.size() - 1);
 
         } else {
             Toast.makeText(this, R.string.connection_error, Toast.LENGTH_LONG).show();
@@ -95,57 +107,41 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate
 
     private void initViews() {
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
         recyclerView.setHasFixedSize(true);
 
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
-
-        this.obterPreferenciasUsuario();
-
-        final ArrayList<Filme> todosFilmes = this.listarFilmes(String.valueOf(1), filtroPref);
-
-        adapter = new DataAdapter(getApplicationContext(), todosFilmes);
-        recyclerView.setAdapter(adapter);
 
         // Add the scroll listener
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
 
-                List<Filme> maisFilmes = listarFilmes(String.valueOf(page), filtroPref);
-                todosFilmes.addAll(maisFilmes);
+                listarFilmes(String.valueOf(page), filtroPref);
+
             }
         });
 
     }
 
     //Cria a grid de filmes através do webservice
-    private ArrayList<Filme> listarFilmes(String page, String filtroPesquisa) {
+    private void listarFilmes(String page, String filtroPesquisa) {
 
         //Pega a data atual para utilizar na pesquisa
         final LocalDate localDate = new LocalDate();
 
-        BuscarFilmesService buscarFilmesService = new BuscarFilmesService(this);
+        BuscarFilmesService buscarFilmesService = new BuscarFilmesService(this, this);
 
-        try {
-
-            //Verifica se a conexao com a internet
-            if (Util.checkConnection(this)) {
-                //Lista de Filmes utilizando espaço de tempo de um mês
-                return buscarFilmesService.execute(page, localDate.minusMonths(1).toString(), localDate.toString(), filtroPesquisa).get();
-            } else {
-                //findViewById(R.id.rootLayout).setBackgroundResource(R.drawable.connection_error);
-                Toast.makeText(this, R.string.connection_error, Toast.LENGTH_LONG).show();
-            }
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        //Verifica se a conexao com a internet
+        if (Util.checkConnection(this)) {
+            //Lista de Filmes utilizando espaço de tempo de um mês
+            buscarFilmesService.buscarFilmes(page, localDate.minusMonths(1).toString(), localDate.toString(), filtroPesquisa);
+        } else {
+            //findViewById(R.id.rootLayout).setBackgroundResource(R.drawable.connection_error);
+            Toast.makeText(this, R.string.connection_error, Toast.LENGTH_LONG).show();
         }
 
-        return null;
     }
 
     public void obterPreferenciasUsuario() {
