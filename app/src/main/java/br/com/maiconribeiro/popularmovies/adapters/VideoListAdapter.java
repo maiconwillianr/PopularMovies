@@ -44,7 +44,6 @@ import br.com.maiconribeiro.popularmovies.model.Video;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  ***********************************************************************************/
-
 public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailView.OnInitializedListener {
 
     private Context mContext;
@@ -135,9 +134,20 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
 
 
     @Override
-    public void onInitializationSuccess(YouTubeThumbnailView view, YouTubeThumbnailLoader loader) {
+    public void onInitializationSuccess(YouTubeThumbnailView view, final YouTubeThumbnailLoader loader) {
         mLoaders.put(view, loader);
         loader.setVideo((String) view.getTag());
+        loader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+            @Override
+            public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+                loader.release();
+            }
+
+            @Override
+            public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+
+            }
+        });
     }
 
     @Override
@@ -146,6 +156,11 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
         Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
     }
 
+    public void releaseLoaders() {
+        for (YouTubeThumbnailLoader loader : mLoaders.values()) {
+            loader.release();
+        }
+    }
 
     static class VideoHolder {
         YouTubeThumbnailView thumb;

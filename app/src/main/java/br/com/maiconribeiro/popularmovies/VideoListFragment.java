@@ -40,6 +40,7 @@ import br.com.maiconribeiro.popularmovies.model.Video;
 public class VideoListFragment extends ListFragment {
 
     private ArrayList<Video> videos;
+    private VideoListAdapter videoListAdapter;
 
     /**
      * Empty constructor
@@ -52,7 +53,8 @@ public class VideoListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         this.videos = args.getParcelableArrayList("videos");
-        setListAdapter(new VideoListAdapter(getActivity(), videos));
+        videoListAdapter = new VideoListAdapter(getActivity(), videos);
+        setListAdapter(videoListAdapter);
     }
 
     @Override
@@ -75,4 +77,9 @@ public class VideoListFragment extends ListFragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        videoListAdapter.releaseLoaders();
+    }
 }

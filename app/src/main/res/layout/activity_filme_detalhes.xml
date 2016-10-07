@@ -129,7 +129,7 @@
             android:text="@string/trailer"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -139,7 +139,8 @@
                 android:layout_height="match_parent"
                 android:minHeight="400dp" />
 
-        </RelativeLayout>
+        </LinearLayout>
+
 
     </LinearLayout>
 
