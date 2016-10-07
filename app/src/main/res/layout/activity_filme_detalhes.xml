@@ -78,7 +78,8 @@
             android:id="@+id/duracao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:paddingBottom="@dimen/activity_vertical_margin"/>
 
 
         <TextView
@@ -92,7 +93,8 @@
             android:id="@+id/numeroVotos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:paddingBottom="@dimen/activity_vertical_margin"/>
 
         <TextView
             android:id="@+id/textView2"
@@ -108,7 +110,7 @@
             android:layout_gravity="center_horizontal" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tituloSinopse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sinopse"
@@ -120,5 +122,26 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
+        <TextView
+            android:id="@+id/tituloTrailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trailer"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/video_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="400dp" />
+
+        </RelativeLayout>
+
     </LinearLayout>
+
+
 </ScrollView>

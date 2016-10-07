@@ -6,9 +6,14 @@
     <string name="numero_voto">Numero de Votos</string>
     <string name="duracao">Duração</string>
     <string name="sinopse">Sinopse</string>
+    <string name="trailer">Trailers</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="action_settings">Configurações</string>
     <string name="connection_error">Erro na conexão com a Internet</string>
+    <string name="video_list_title">Title</string>
+    <string name="error_init_failure">Initialization failure: Unable to play video</string>
+    <string name="youtube_activity_placeholder">If you don\'t want to use a Fragment,
+        you can simply add a YouTubePlayerView to your layout file and handle it the same way.</string>
 
     <string name="pref_category_ordenacao">Ordenação</string>
     <string name="pref_ordenacao_key">ordenacao</string>

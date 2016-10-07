@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by maiconwillianribeiro on 15/09/16.
@@ -20,7 +19,7 @@ public class Filme implements Parcelable {
     private String numeroVotos;
     private String homepage;
     private String duracao;
-    private List<Video> videos;
+    private ArrayList<Video> videos;
 
 
     public Filme() {
@@ -29,7 +28,7 @@ public class Filme implements Parcelable {
     public Filme(String idFilme, String titulo, String pathImagemPoster,
                  String sinopse, String dataLancamento, String notaMedia,
                  String numeroVotos, String homepage, String duracao,
-                 List<Video> videos) {
+                 ArrayList<Video> videos) {
         this.idFilme = idFilme;
         this.titulo = titulo;
         this.pathImagemPoster = pathImagemPoster;
@@ -114,11 +113,11 @@ public class Filme implements Parcelable {
         this.duracao = duracao;
     }
 
-    public List<Video> getVideos() {
+    public ArrayList<Video> getVideos() {
         return videos;
     }
 
-    public void setVideos(List<Video> videos) {
+    public void setVideos(ArrayList<Video> videos) {
         this.videos = videos;
     }
 
