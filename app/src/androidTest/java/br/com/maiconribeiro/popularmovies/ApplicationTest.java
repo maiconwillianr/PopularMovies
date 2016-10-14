@@ -25,7 +25,7 @@ public class ApplicationTest {
 
     @Before
     public void configure() {
-        context =  InstrumentationRegistry.getTargetContext();
+        context = InstrumentationRegistry.getTargetContext();
     }
 
     @Test
@@ -49,10 +49,10 @@ public class ApplicationTest {
         // verify that the tables have been created
         do {
             tableNameHashSet.remove(c.getString(0));
-        } while( c.moveToNext() );
+        } while (c.moveToNext());
 
-        // if this fails, it means that your database doesn't contain both the location entry
-        // and weather entry tables
+        // if this fails, it means that your database doesn't contain both the filme entry
+        // and video entry tables
         assertTrue("Error: Your database was created without both the filme entry table",
                 tableNameHashSet.isEmpty());
 
@@ -62,6 +62,29 @@ public class ApplicationTest {
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 c.moveToFirst());
+
+        // Build a HashSet of all of the column names we want to look for
+        final HashSet<String> filmeColumnHashSet = new HashSet<String>();
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry._ID);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.TITULO);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.PATH_IMAGEM_POSTER);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.SINOPSE);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.DATA_LANCAMENTO);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.NOTA_MEDIA);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.NUMERO_VOTOS);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.HOMEPAGE);
+        filmeColumnHashSet.add(FilmesContract.FilmeEntry.DURACAO);
+
+        int columnNameIndex = c.getColumnIndex("name");
+        do {
+            String columnName = c.getString(columnNameIndex);
+            filmeColumnHashSet.remove(columnName);
+        } while(c.moveToNext());
+
+        // if this fails, it means that your database doesn't contain all of the required filme
+        // entry columns
+        assertTrue("Error: The database doesn't contain all of the required filme entry columns",
+                filmeColumnHashSet.isEmpty());
 
         db.close();
     }

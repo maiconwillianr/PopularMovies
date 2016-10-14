@@ -32,7 +32,23 @@ public class DbHelper extends SQLiteOpenHelper {
                 FilmesContract.FilmeEntry.DURACAO + " REAL " +
                 " );";
 
+        final String SQL_CREATE_VIDEO_TABLE = "CREATE TABLE " + FilmesContract.VideoEntry.TABLE_NAME + " (" +
+                FilmesContract.VideoEntry._ID + " INTEGER PRIMARY KEY," +
+                FilmesContract.VideoEntry.ISO_639_1 + " TEXT, " +
+                FilmesContract.VideoEntry.ISO_3166_1 + " TEXT, " +
+                FilmesContract.VideoEntry.KEY + " TEXT NOT NULL, " +
+                FilmesContract.VideoEntry.NAME + " TEXT NOT NULL, " +
+                FilmesContract.VideoEntry.SITE + " TEXT, " +
+                FilmesContract.VideoEntry.SIZE + " TEXT, " +
+                FilmesContract.VideoEntry.TYPE + " TEXT, " +
+
+                // Set up the location column as a foreign key to location table.
+                " FOREIGN KEY (" + FilmesContract.VideoEntry.FILME_KEY + ") REFERENCES " +
+                    FilmesContract.FilmeEntry.TABLE_NAME + " (" + FilmesContract.FilmeEntry._ID + "), " +
+                " );";
+
         db.execSQL(SQL_CREATE_FILME_TABLE);
+        db.execSQL(SQL_CREATE_VIDEO_TABLE);
 
     }
 
