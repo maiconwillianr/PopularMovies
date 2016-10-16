@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -50,7 +51,10 @@ public class FilmeDetalhesActivity extends AppCompatActivity implements AsyncTas
             }
 
             //Seta o titulo da ActionBar com o nome do filme escolhido
-            getSupportActionBar().setTitle(filme.getTitulo());
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            toolbar.setTitle(filme.getTitulo());
 
             TextView labelTitulo = (TextView) findViewById(R.id.tituloDetalhe);
             labelTitulo.setText(filme.getTitulo());

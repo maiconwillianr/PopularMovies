@@ -66,7 +66,6 @@ public class VideoListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
 
         final Context context = getActivity();
-        final String DEVELOPER_KEY = BuildConfig.THE_GOOGLE_API_KEY;
         final Video video = videos.get(position);
 
 
