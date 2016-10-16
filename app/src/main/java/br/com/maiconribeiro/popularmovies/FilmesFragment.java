@@ -73,12 +73,12 @@ public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
             if (adapter == null) {
                 todosFilmes = (ArrayList<Filme>) output;
                 adapter = new DataAdapter(context, todosFilmes);
-                recyclerView.setAdapter(adapter);
             } else {
                 todosFilmes.addAll((ArrayList<Filme>) output);
                 adapter.notifyItemRangeInserted(adapter.getItemCount(), todosFilmes.size() - 1);
             }
 
+            recyclerView.setAdapter(adapter);
 
         } else {
             Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show();
@@ -113,6 +113,7 @@ public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.card_recycler_view);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(new DataAdapter(context, todosFilmes));
 
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
