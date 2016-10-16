@@ -10,9 +10,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import br.com.maiconribeiro.popularmovies.adapters.TabsAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import br.com.maiconribeiro.popularmovies.adapters.TabsAdapter;
+import br.com.maiconribeiro.popularmovies.interfaces.AsyncTaskDelegate;
+import br.com.maiconribeiro.popularmovies.model.Genero;
+import br.com.maiconribeiro.popularmovies.sync.BuscarGeneroFilmesService;
+
+public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate {
+
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,36 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        BuscarGeneroFilmesService buscarGeneroFilmesService = new BuscarGeneroFilmesService(this, getApplicationContext());
+        buscarGeneroFilmesService.buscarGeneros();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Todos"));
-        tabLayout.addTab(tabLayout.newTab().setText("Ação"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final TabsAdapter adapter = new TabsAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
     }
 
@@ -87,4 +73,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void processFinish(Object output) {
+
+        if (output != null) {
+
+            List<Genero> generos = (ArrayList<Genero>) output;
+
+            tabLayout.addTab(tabLayout.newTab().setText("TODOS"));
+            for(Genero genero : generos){
+                tabLayout.addTab(tabLayout.newTab().setText(genero.getName()));
+            }
+
+            final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+            final TabsAdapter adapter = new TabsAdapter
+                    (getSupportFragmentManager(), tabLayout.getTabCount());
+            viewPager.setAdapter(adapter);
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    viewPager.setCurrentItem(tab.getPosition());
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+
+
+        }
+    }
 }

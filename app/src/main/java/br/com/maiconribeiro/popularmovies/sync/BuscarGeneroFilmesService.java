@@ -2,12 +2,22 @@ package br.com.maiconribeiro.popularmovies.sync;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import br.com.maiconribeiro.popularmovies.BuildConfig;
+import br.com.maiconribeiro.popularmovies.VolleySingleton;
 import br.com.maiconribeiro.popularmovies.helpers.Util;
 import br.com.maiconribeiro.popularmovies.interfaces.AsyncTaskDelegate;
 import br.com.maiconribeiro.popularmovies.model.Genero;
@@ -15,7 +25,6 @@ import br.com.maiconribeiro.popularmovies.model.Genero;
 /**
  * Created by maiconwillianribeiro on 09/10/16.
  */
-
 public class BuscarGeneroFilmesService {
 
     private final String LOG_TAG = BuscarGeneroFilmesService.class.getSimpleName();
@@ -57,7 +66,7 @@ public class BuscarGeneroFilmesService {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-/*
+
             JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.GET, url.toString(),
                     new com.android.volley.Response.Listener<JSONObject>() {
 
@@ -66,36 +75,24 @@ public class BuscarGeneroFilmesService {
 
                             generos = new ArrayList<>();
 
-                            final String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-                            final String RESULTS = "results";
-                            final String TITLE = "title";
-                            final String POSTER_PATH = "poster_path";
-                            final String VOTE_AVAREGE = "vote_average";
-                            final String OVERVIEW = "overview";
-                            final String RELEASE_DATE = "release_date";
-                            final String VOTE_COUNT = "vote_count";
+                            final String GENRES = "genres";
                             final String ID = "id";
+                            final String NAME = "name";
 
                             try {
 
-                                JSONArray filmesArray = generoJson.getJSONArray(RESULTS);
+                                JSONArray generosArray = generoJson.getJSONArray(GENRES);
 
-                                if (filmesArray.length() > 0) {
-                                    for (int i = 0; i < filmesArray.length(); i++) {
-                                        JSONObject f = filmesArray.getJSONObject(i);
-                                        Filme filme = new Filme();
-                                        filme.setIdFilme(f.getString(ID));
-                                        filme.setTitulo(f.getString(TITLE));
-                                        if (!"null".equals(f.getString(POSTER_PATH))) {
-                                            filme.setPathImagemPoster(IMAGE_PATH + f.get(POSTER_PATH));
-                                        } else {
-                                            filme.setPathImagemPoster("");
-                                        }
-                                        filme.setNotaMedia(f.getString(VOTE_AVAREGE));
-                                        filme.setSinopse(f.getString(OVERVIEW));
-                                        filme.setDataLancamento(f.getString(RELEASE_DATE));
-                                        filme.setNumeroVotos(f.getString(VOTE_COUNT));
-                                        filmes.add(filme);
+                                if (generosArray.length() > 0) {
+                                    for (int i = 0; i < generosArray.length(); i++) {
+
+                                        JSONObject f = generosArray.getJSONObject(i);
+
+                                        Genero genero = new Genero();
+                                        genero.setId(f.getString(ID));
+                                        genero.setName(f.getString(NAME));
+
+                                        generos.add(genero);
                                     }
                                 }
 
@@ -104,7 +101,7 @@ public class BuscarGeneroFilmesService {
                             }
 
                             if (delegate != null) {
-                                delegate.processFinish(filmes);
+                                delegate.processFinish(generos);
                             }
 
                         }
@@ -118,7 +115,7 @@ public class BuscarGeneroFilmesService {
 
             RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
             queue.add(request);
-            */
+
         }
     }
 

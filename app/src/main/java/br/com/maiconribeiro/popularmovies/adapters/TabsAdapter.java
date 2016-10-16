@@ -21,6 +21,9 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
+        FilmesFragment tab1 = new FilmesFragment();
+        return tab1;
+        /*
         switch (position) {
             case 0:
                 FilmesFragment tab1 = new FilmesFragment();
@@ -34,6 +37,7 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
             default:
                 return null;
         }
+        */
     }
 
     @Override
