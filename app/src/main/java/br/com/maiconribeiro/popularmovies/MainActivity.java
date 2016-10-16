@@ -16,7 +16,7 @@ import java.util.List;
 import br.com.maiconribeiro.popularmovies.adapters.TabsAdapter;
 import br.com.maiconribeiro.popularmovies.interfaces.AsyncTaskDelegate;
 import br.com.maiconribeiro.popularmovies.model.Genero;
-import br.com.maiconribeiro.popularmovies.sync.BuscarGeneroFilmesService;
+import br.com.maiconribeiro.popularmovies.sync.FilmesService;
 
 public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate {
 
@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate
 
         setContentView(R.layout.activity_main);
 
-        BuscarGeneroFilmesService buscarGeneroFilmesService = new BuscarGeneroFilmesService(this, getApplicationContext());
-        buscarGeneroFilmesService.buscarGeneros();
+        FilmesService filmesService = new FilmesService(this, getApplicationContext());
+        filmesService.buscarGeneros();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

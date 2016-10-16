@@ -21,7 +21,7 @@ import br.com.maiconribeiro.popularmovies.helpers.Util;
 import br.com.maiconribeiro.popularmovies.interfaces.AsyncTaskDelegate;
 import br.com.maiconribeiro.popularmovies.listener.EndlessRecyclerViewScrollListener;
 import br.com.maiconribeiro.popularmovies.model.Filme;
-import br.com.maiconribeiro.popularmovies.sync.BuscarFilmesService;
+import br.com.maiconribeiro.popularmovies.sync.FilmesService;
 
 
 public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
@@ -73,12 +73,11 @@ public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
             if (adapter == null) {
                 todosFilmes = (ArrayList<Filme>) output;
                 adapter = new DataAdapter(context, todosFilmes);
+                recyclerView.setAdapter(adapter);
             } else {
                 todosFilmes.addAll((ArrayList<Filme>) output);
                 adapter.notifyItemRangeInserted(adapter.getItemCount(), todosFilmes.size() - 1);
             }
-
-            recyclerView.setAdapter(adapter);
 
         } else {
             Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show();
@@ -136,12 +135,12 @@ public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
         //Pega a data atual para utilizar na pesquisa
         final LocalDate localDate = new LocalDate();
 
-        BuscarFilmesService buscarFilmesService = new BuscarFilmesService(this, context);
+        FilmesService filmesService = new FilmesService(this, context);
 
         //Verifica se a conexao com a internet
         if (Util.checkConnection(context)) {
             //Lista de Filmes utilizando espaço de tempo de um mês
-            buscarFilmesService.buscarFilmes(page, localDate.minusMonths(1).toString(), localDate.toString(), filtroPesquisa);
+            filmesService.buscarFilmes(page, localDate.minusMonths(1).toString(), localDate.toString(), filtroPesquisa);
         } else {
             //findViewById(R.id.rootLayout).setBackgroundResource(R.drawable.connection_error);
             Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show();

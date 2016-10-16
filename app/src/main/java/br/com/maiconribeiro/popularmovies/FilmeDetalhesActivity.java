@@ -15,6 +15,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
+import org.joda.time.IllegalInstantException;
 import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import br.com.maiconribeiro.popularmovies.interfaces.AsyncTaskDelegate;
 import br.com.maiconribeiro.popularmovies.model.Filme;
 import br.com.maiconribeiro.popularmovies.model.Video;
-import br.com.maiconribeiro.popularmovies.sync.BuscarVideosFilmeService;
+import br.com.maiconribeiro.popularmovies.sync.FilmesService;
 
 public class FilmeDetalhesActivity extends AppCompatActivity implements AsyncTaskDelegate {
 
@@ -39,8 +40,10 @@ public class FilmeDetalhesActivity extends AppCompatActivity implements AsyncTas
 
             filme = getIntent().getExtras().getParcelable(Filme.PARCELABLE_KEY);
 
-            BuscarVideosFilmeService buscarVideosFilmeService = new BuscarVideosFilmeService(this, this);
-            buscarVideosFilmeService.buscarVideosFilme(filme.getIdFilme());
+            if (!filme.getVideos().isEmpty()) {
+                FilmesService filmesService = new FilmesService(this, this);
+                filmesService.buscarVideosFilme(filme.getIdFilme());
+            }
 
             //Check for any issues
             final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this);
@@ -61,10 +64,14 @@ public class FilmeDetalhesActivity extends AppCompatActivity implements AsyncTas
 
             TextView dataLancamento = (TextView) findViewById(R.id.dataLancamento);
             if (filme.getDataLancamento() != null) {
-                DateTime dt = DateTime.parse(filme.getDataLancamento(), DateTimeFormat.forPattern("yyyy-MM-dd"));
-                dataLancamento.setText(dt.toString("dd-MM-yyyy"));
+                try {
+                    DateTime dt = DateTime.parse(filme.getDataLancamento(), DateTimeFormat.forPattern("yyyy-MM-dd"));
+                    dataLancamento.setText(dt.toString("dd-MM-yyyy"));
+                } catch (IllegalInstantException ie) {
+                    dataLancamento.setText("Não disponível");
+                }
             } else {
-                dataLancamento.setText("");
+                dataLancamento.setText("Não disponível");
             }
 
             ImageView imageFilme = (ImageView) findViewById(R.id.imagemDetalhe);
