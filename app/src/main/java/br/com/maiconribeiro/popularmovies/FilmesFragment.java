@@ -2,6 +2,7 @@ package br.com.maiconribeiro.popularmovies;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -108,11 +109,18 @@ public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
     private void initViews(View rootView) {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.card_recycler_view);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setAdapter(new DataAdapter(context, todosFilmes));
 
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        GridLayoutManager gridLayoutManager;
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            gridLayoutManager = new GridLayoutManager(context, 2);
+            recyclerView.setLayoutManager(gridLayoutManager);
+        }
+        else{
+            gridLayoutManager = new GridLayoutManager(context, 3);
+            recyclerView.setLayoutManager(gridLayoutManager);
+        }
 
         // Add the scroll listener
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
