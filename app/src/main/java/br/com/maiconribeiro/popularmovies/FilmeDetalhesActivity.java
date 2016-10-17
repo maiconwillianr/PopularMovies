@@ -40,10 +40,8 @@ public class FilmeDetalhesActivity extends AppCompatActivity implements AsyncTas
 
             filme = getIntent().getExtras().getParcelable(Filme.PARCELABLE_KEY);
 
-            if (!filme.getVideos().isEmpty()) {
-                FilmesService filmesService = new FilmesService(this, this);
-                filmesService.buscarVideosFilme(filme.getIdFilme());
-            }
+            FilmesService filmesService = new FilmesService(this, this);
+            filmesService.buscarVideosFilme(filme.getIdFilme());
 
             //Check for any issues
             final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this);
