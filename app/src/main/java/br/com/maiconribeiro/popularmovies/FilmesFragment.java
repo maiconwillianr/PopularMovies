@@ -26,10 +26,8 @@ import br.com.maiconribeiro.popularmovies.sync.FilmesService;
 
 public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
+    private static final String GENERO = "genero";
 
     private String filtroPref;
     private DataAdapter adapter;
@@ -41,11 +39,10 @@ public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
     public FilmesFragment() {
     }
 
-    public static FilmesFragment newInstance(String param1, String param2) {
+    public static FilmesFragment newInstance(String genero) {
         FilmesFragment fragment = new FilmesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(GENERO, genero);
         fragment.setArguments(args);
         return fragment;
     }
@@ -140,7 +137,11 @@ public class FilmesFragment extends Fragment implements AsyncTaskDelegate {
         //Verifica se a conexao com a internet
         if (Util.checkConnection(context)) {
             //Lista de Filmes utilizando espaço de tempo de um mês
-            filmesService.buscarFilmes(page, localDate.minusMonths(1).toString(), localDate.toString(), filtroPesquisa);
+            if(this.getArguments().getString(GENERO) == null) {
+                filmesService.buscarFilmes(page, localDate.minusMonths(1).toString(), localDate.toString(), filtroPesquisa);
+            }else{
+                filmesService.buscarFilmesPorGenero(page, this.getArguments().getString(GENERO), localDate.minusMonths(1).toString(), localDate.toString(), filtroPesquisa);
+            }
         } else {
             //findViewById(R.id.rootLayout).setBackgroundResource(R.drawable.connection_error);
             Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show();

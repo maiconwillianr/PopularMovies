@@ -83,7 +83,11 @@ public class FilmeDetalhesActivity extends AppCompatActivity implements AsyncTas
             }
 
             TextView labelDuracao = (TextView) findViewById(R.id.duracao);
-            labelDuracao.setText(filme.getDuracao());
+            if(filme.getDuracao().equals("0") || filme.getDuracao() == null){
+                labelDuracao.setText("Não disponível");
+            }else{
+                labelDuracao.setText(filme.getDuracao());
+            }
 
             TextView labelNumeroVotos = (TextView) findViewById(R.id.numeroVotos);
             labelNumeroVotos.setText(filme.getNumeroVotos());

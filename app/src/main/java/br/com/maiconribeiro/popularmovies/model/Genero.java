@@ -15,6 +15,11 @@ public class Genero implements Parcelable {
     public Genero() {
     }
 
+    public Genero(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getIdGenero() {
         return idGenero;
     }

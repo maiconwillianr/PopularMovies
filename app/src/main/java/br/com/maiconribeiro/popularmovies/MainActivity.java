@@ -84,10 +84,11 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskDelegate
             for(Genero genero : generos){
                 tabLayout.addTab(tabLayout.newTab().setText(genero.getName()));
             }
+            generos.add(0, new Genero(null, "Todos"));
 
             final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
             final TabsAdapter adapter = new TabsAdapter
-                    (getSupportFragmentManager(), tabLayout.getTabCount());
+                    (getSupportFragmentManager(), tabLayout.getTabCount(), generos);
             viewPager.setAdapter(adapter);
             viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
